@@ -65,17 +65,19 @@
         .register-btn:hover {
             background-color: #0056b3;
         }
+        .success-message {
+            display: none;
+            margin-top: 20px;
+            font-size: 16px;
+            color: green;
+        }
     </style>
 </head>
 <body>
     <div class="header">CitiusTech | Shaping Healthcare Possibilities</div>
     <div class="register-container">
         <h2>Register</h2>
-        <form id="registration-form">
-            <div class="input-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Enter your email" required>
-            </div>
+        <form id="register-form">
             <div class="input-group">
                 <label for="first-name">First Name</label>
                 <input type="text" id="first-name" placeholder="Enter your first name" required>
@@ -85,24 +87,37 @@
                 <input type="text" id="last-name" placeholder="Enter your last name" required>
             </div>
             <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+            <div class="input-group">
                 <label for="phone">Phone Number</label>
                 <input type="tel" id="phone" placeholder="Enter your phone number" required>
             </div>
-            <button type="button" class="register-btn" onclick="submitForm()">Register</button>
+            <button type="button" class="register-btn" onclick="submitRegisterForm()">Register</button>
         </form>
+        <p class="success-message" id="success-message">Successfully registered! Redirecting to login...</p>
     </div>
 
     <script>
-        // Function to handle form submission
-        function submitForm() {
-            // Check if the form is valid
-            const form = document.getElementById('registration-form');
+        function submitRegisterForm() {
+            const form = document.getElementById('register-form');
+            const firstName = document.getElementById('first-name').value.trim();
+            const lastName = document.getElementById('last-name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const successMessage = document.getElementById('success-message');
+
             if (form.checkValidity()) {
-                // Redirect to index.html after successful registration
-                window.location.href = 'index.html';
+                // Show success message
+                successMessage.style.display = 'block';
+
+                // Redirect after 2 seconds
+                setTimeout(() => {
+                    window.location.href = 'Home.html';
+                }, 2000);
             } else {
-                // If form is not valid, alert the user
-                alert('Please fill out all the required fields.');
+                alert('Please fill out all required fields.');
             }
         }
     </script>

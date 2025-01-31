@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CitiusTech | Login</title>
+    <script>
+        function loginUser(event) {
+            event.preventDefault(); // Prevent form submission to the server
+            
+            //alert("Login Successful!"); // Show success message
+
+            // Redirect to home.html after successful login
+            window.location.href = "Home.html";
+        }
+    </script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -79,7 +89,7 @@
     <div class="header">CitiusTech | Shaping Healthcare Possibilities</div>
     <div class="login-container">
         <h2>Login</h2>
-        <form>
+        <form onsubmit="loginUser(event)">
             <div class="input-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" placeholder="Enter your username" required>
@@ -93,8 +103,8 @@
     </div>
 
     <div class="footer">
-	    <p>For Registration <a href="register.html">Click here</a></p>
+        <p>For Registration <a href="register.html">Click here</a></p>
         <p>Need to Reset your password <a href="reset-password.html">Click here</a></p>
-        </div>
+    </div>
 </body>
 </html>
