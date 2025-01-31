@@ -100,22 +100,45 @@
     </div>
 
     <script>
-        function submitRegisterForm() {
-            const form = document.getElementById('register-form');
+        async function submitRegisterForm() {
             const firstName = document.getElementById('first-name').value.trim();
             const lastName = document.getElementById('last-name').value.trim();
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
             const successMessage = document.getElementById('success-message');
 
-            if (form.checkValidity()) {
+            if (firstName && lastName && email && phone) {
                 // Show success message
                 successMessage.style.display = 'block';
 
-                // Redirect after 2 seconds
-                setTimeout(() => {
-                    window.location.href = 'home.html';
-                }, 2000);
+                // Create the payload to send to the server
+                const userData = {
+                    first_name: firstName,
+                    last_name: lastName,
+                    email: email,
+                    phone: phone
+                };
+
+                try {
+                    // Send data to the server using fetch
+                    const response = await fetch('http://localhost:3000/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(userData)
+                    });
+
+                    if (response.ok) {
+                        setTimeout(() => {
+                            window.location.href = 'home.html';
+                        }, 2000);
+                    } else {
+                        alert('Registration failed. Please try again.');
+                    }
+                } catch (error) {
+                    alert('Error connecting to the server.');
+                }
             } else {
                 alert('Please fill out all required fields.');
             }
