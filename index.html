@@ -106,5 +106,37 @@
         <p>For Registration <a href="register.html">Click here</a></p>
         <p>Need to Reset your password <a href="reset-password.html">Click here</a></p>
     </div>
+
+    <script>
+        function submitLoginForm() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!email || !password) {
+        alert("Please fill in both fields.");
+        return;
+    }
+
+    fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === "Login successful") {
+            // Redirect to home page or dashboard
+            window.location.href = "home.html";
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+}
+    </script>
 </body>
 </html>

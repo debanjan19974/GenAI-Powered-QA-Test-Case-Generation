@@ -1,45 +1,47 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mysql = require('mysql');
+const express = require("express");
+const mysql = require("mysql");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+
+
 const app = express();
-
-// Middleware to parse JSON bodies
 app.use(bodyParser.json());
+app.use(cors());
 
-// Create database connection
+// Database connection
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root', // Change with your MySQL username
-    password: '', // Change with your MySQL password
-    database: 'citiustech' // Change with your database name
-	port: 3306
+    host: "localhost",
+    user: "root",
+    password: "",  // Change if you set a password
+    database: "citiustech",
+    port: 3307, // Important! Since your MySQL is on port 3307
 });
 
-// Connect to the database
 db.connect((err) => {
     if (err) {
-        console.error('Database connection failed:', err.stack);
+        console.error("Database connection failed:", err);
         return;
     }
-    console.log('Connected to the database.');
+    console.log("Connected to MySQL database.");
 });
 
-// POST endpoint to register user
-app.post('/register', (req, res) => {
-    const { first_name, last_name, email, phone } = req.body;
+// Register user API
+app.post("/register", (req, res) => {
+    const { first_name, last_name, email, phone, password } = req.body;
+    const sql = "INSERT INTO users (first_name, last_name, email, phone, password) VALUES (?, ?, ?, ?, ?)";
 
-    // SQL query to insert user data
-    const query = 'INSERT INTO users (first_name, last_name, email, phone) VALUES (?, ?, ?, ?)';
-    db.query(query, [first_name, last_name, email, phone], (err, result) => {
+    db.query(sql, [first_name, last_name, email, phone, password], (err, result) => {
         if (err) {
-            console.error('Error inserting data:', err);
-            return res.status(500).json({ message: 'Database error' });
+            console.error("Error inserting user:", err);
+            res.status(500).json({ message: "Error registering user" });
+            return;
         }
-        res.status(200).json({ message: 'User registered successfully!' });
+        res.json({ message: "User registered successfully!" });
     });
 });
 
+
 // Start server
 app.listen(3000, () => {
-    console.log('Server running on http://localhost:3000');
+    console.log("Server running on http://localhost:3000");
 });

@@ -94,55 +94,84 @@
                 <label for="phone">Phone Number</label>
                 <input type="tel" id="phone" placeholder="Enter your phone number" required>
             </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+            <div class="input-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" placeholder="Confirm your password" required>            
             <button type="button" class="register-btn" onclick="submitRegisterForm()">Register</button>
         </form>
         <p class="success-message" id="success-message">Successfully registered! Redirecting to login...</p>
     </div>
 
     <script>
-        async function submitRegisterForm() {
-            const firstName = document.getElementById('first-name').value.trim();
-            const lastName = document.getElementById('last-name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const successMessage = document.getElementById('success-message');
+    function submitRegisterForm() {
+    const firstName = document.getElementById("first-name").value.trim();
+    const lastName = document.getElementById("last-name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const password = document.getElementById("password").value.trim();  // New password field
 
-            if (firstName && lastName && email && phone) {
-                // Show success message
-                successMessage.style.display = 'block';
+    if (!firstName || !lastName || !email || !phone || !password) {
+        alert("Please fill in all fields.");
+        return;
+    }
 
-                // Create the payload to send to the server
-                const userData = {
-                    first_name: firstName,
-                    last_name: lastName,
-                    email: email,
-                    phone: phone
-                };
-
-                try {
-                    // Send data to the server using fetch
-                    const response = await fetch('http://localhost:3000/register', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(userData)
-                    });
-
-                    if (response.ok) {
-                        setTimeout(() => {
-                            window.location.href = 'home.html';
-                        }, 2000);
-                    } else {
-                        alert('Registration failed. Please try again.');
-                    }
-                } catch (error) {
-                    alert('Error connecting to the server.');
-                }
-            } else {
-                alert('Please fill out all required fields.');
-            }
+    fetch("http://localhost:3000/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ first_name: firstName, last_name: lastName, email, phone, password }),  // Include password
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        if (data.message === "User registered successfully!") {
+            window.location.href = "https://www.citiustech.com/"; // Redirect to CitiusTech website
         }
-    </script>
+    })
+    .catch(error => console.error("Error:", error));
+}
+</script>
+
 </body>
 </html>
+<script>
+function submitRegisterForm() {
+    const firstName = document.getElementById("first-name").value.trim();
+    const lastName = document.getElementById("last-name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!firstName || !lastName || !email || !phone || !password) {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    // Validate phone number
+    if (phone.length !== 10 || isNaN(phone)) {
+        //alert("Phone number must be exactly 10 digits.");
+        return;
+    }
+
+    // Validate email domain
+    if (!email.endsWith("@gmail.com")) {
+        alert("Email must be a @gmail.com address.");
+        return;
+    }
+
+    fetch("http://localhost:3000/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ first_name: firstName, last_name: lastName, email, phone, password }),  // Include password
+    })
+    .then(response => response.json())
+    .then(window.location.href = "https://www.citiustech.com/")
+    .catch(error => console.error("Error:", error));}
+</script>
